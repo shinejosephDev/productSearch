@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.life.productsearch">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,7 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LifeProductSearch">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.PrescriptionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.MyOrdersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ProductSearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
