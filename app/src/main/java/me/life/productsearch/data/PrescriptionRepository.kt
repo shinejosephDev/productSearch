@@ -17,7 +17,7 @@ class PrescriptionRepository @Inject constructor(private val apiService: ApiServ
         return apiService.createPrescription(request)
     }
 
-    suspend fun uploadImage(file:File): UploadResponse {
+    suspend fun uploadImage(file:File): Response<UploadResponse> {
 //        val file = File("/storage/emulated/0/Download/Corrections 6.jpg")
         val requestFile: RequestBody =
             RequestBody.create(MediaType.parse("multipart/form-data"), file)

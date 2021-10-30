@@ -12,7 +12,8 @@ import me.life.productsearch.databinding.ListItemDialogImagesBinding
 
 class DialogImageAdapter(
     val resultLauncher: ActivityResultLauncher<Intent>,
-    val list: List<String>
+    val list: List<String>,
+    val isLimit: Boolean
 ) :
     RecyclerView.Adapter<DialogImageAdapter.ViewHolder>() {
 
@@ -47,13 +48,26 @@ class DialogImageAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (position == itemCount - 1)
-            holder.showAddNew(resultLauncher)
-        else
-            holder.bind(list[position])
+        if (isLimit) {
+            if (list.size == 2)
+                holder.bind(list[position])
+            else
+                if (position == itemCount - 1)
+                    holder.showAddNew(resultLauncher)
+                else
+                    holder.bind(list[position])
+        }else{
+            if (position == itemCount - 1)
+                holder.showAddNew(resultLauncher)
+            else
+                holder.bind(list[position])
+        }
     }
 
     override fun getItemCount(): Int {
-        return list.size + 1
+        if (list.size == 2 && isLimit) {
+            return 2
+        } else
+            return list.size + 1
     }
 }

@@ -4,7 +4,6 @@ import me.life.productsearch.data.PrescriptionRepository
 import me.life.productsearch.model.PrescriptionRequest
 import me.life.productsearch.model.ResultData
 import me.life.productsearch.model.UploadResponse
-import okhttp3.MultipartBody
 import retrofit2.Response
 import java.io.File
 import javax.inject.Inject
@@ -18,7 +17,11 @@ class PrescriptionUsecase @Inject constructor(private val prescriptionRepository
 
     suspend fun fileUpload(file: File): ResultData<UploadResponse> {
         val data = prescriptionRepository.uploadImage(file)
-        return ResultData.Success(data)
+        if (data.isSuccessful) {
+            return ResultData.Success(data.body())
+        } else {
+            return ResultData.Error(data.errorBody()?.string())
+        }
     }
 
 }

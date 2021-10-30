@@ -1,13 +1,16 @@
 package me.life.productsearch.ui
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -25,7 +28,7 @@ import java.io.File
 class PrescriptionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPrescriptionBinding
     private val viewModel: PrescriptionViewModel by viewModels()
-
+    lateinit var dialog: AlertDialog
     var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -35,10 +38,13 @@ class PrescriptionActivity : AppCompatActivity() {
                     uriToImageFile(it)
                 }
                 if (file != null) {
+                    dialog.dismiss()
+                    binding.blocker.visibility = View.VISIBLE
                     viewModel.fileUpload(file)
                 }
             }
         }
+
 
     private fun uriToImageFile(uri: Uri): File? {
         val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
@@ -137,30 +143,56 @@ class PrescriptionActivity : AppCompatActivity() {
                     prescription = viewModel.prescriptionList
                 )
             )
-
-            viewModel.response.observe(this, {
-                run {
-                    if (it is ResultData.Success) {
-                        finish()
-                    } else if (it is ResultData.Error) {
-                        Toast.makeText(
-                            this,
-                            "Attempt failed. Please try again.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            })
         }
+
+        viewModel.response.observe(this, {
+            run {
+                if (it is ResultData.Success) {
+                    finish()
+                } else if (it is ResultData.Error) {
+                    Toast.makeText(
+                        this,
+                        "Attempt failed. Please try again.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+
+        viewModel.fileResponse.observe(this, {
+            if (it is ResultData.Success) {
+                binding.blocker.visibility = View.GONE
+            } else if (it is ResultData.Error) {
+                binding.blocker.visibility = View.GONE
+                Toast.makeText(
+                    this,
+                    "Attempt failed. Please try again.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
+
 
     private fun showDialog(images: List<String>) {
         val binding = DialogImagesBinding.inflate(layoutInflater)
-        val dialog = MaterialAlertDialogBuilder(this)
+        dialog = MaterialAlertDialogBuilder(this)
             .setView(binding.root)
             .show()
 
-        val imageAdapter = DialogImageAdapter(resultLauncher, images)
+        val imageAdapter: DialogImageAdapter
+
+        when (viewModel.selectedType) {
+            PrescriptionViewModel.TYPE_EID -> {
+                imageAdapter = DialogImageAdapter(resultLauncher, images, true)
+            }
+            PrescriptionViewModel.TYPE_INSURANCE -> {
+                imageAdapter = DialogImageAdapter(resultLauncher, images, true)
+            }
+            else -> {
+                imageAdapter = DialogImageAdapter(resultLauncher, images, false)
+            }
+        }
 
         binding.recyclerView2.apply {
             layoutManager = LinearLayoutManager(this@PrescriptionActivity)

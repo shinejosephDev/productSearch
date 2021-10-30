@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import me.life.productsearch.model.OrderResponse
 import me.life.productsearch.model.PrescriptionRequest
 import me.life.productsearch.model.ResultData
 import me.life.productsearch.usecase.PrescriptionUsecase
@@ -25,6 +24,10 @@ class PrescriptionViewModel @Inject constructor(private var usecase: Prescriptio
 
     private val _response: MutableLiveData<ResultData<Unit>> = MutableLiveData()
     val response: LiveData<ResultData<Unit>> = _response
+
+    private val _fileresponse: MutableLiveData<ResultData<Unit>> = MutableLiveData()
+    val fileResponse: LiveData<ResultData<Unit>> = _fileresponse
+
     var selectedType: String = ""
 
     var eidList: ArrayList<String> = ArrayList()
@@ -34,10 +37,10 @@ class PrescriptionViewModel @Inject constructor(private var usecase: Prescriptio
     fun submit(prescriptionRequest: PrescriptionRequest) {
         viewModelScope.launch {
             val response = usecase.submitPrescription(prescriptionRequest)
-            if (response.isSuccessful){
-                _response.value = ResultData.Success()
-            }else {
-                _response.postValue( ResultData.Error())
+            if (response.isSuccessful) {
+                _response.postValue(ResultData.Success())
+            } else {
+                _response.postValue(ResultData.Error())
             }
         }
     }
@@ -46,7 +49,7 @@ class PrescriptionViewModel @Inject constructor(private var usecase: Prescriptio
         viewModelScope.launch {
             val response = usecase.fileUpload(file)
             if (response is ResultData.Success) {
-
+                _fileresponse.postValue(ResultData.Success())
                 when (selectedType) {
                     TYPE_EID -> {
                         response.data?.data?.file?.let { eidList.add(it) }
@@ -58,6 +61,8 @@ class PrescriptionViewModel @Inject constructor(private var usecase: Prescriptio
                         response.data?.data?.file?.let { prescriptionList.add(it) }
                     }
                 }
+            } else {
+                _fileresponse.postValue(ResultData.Error())
             }
         }
     }

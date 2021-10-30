@@ -29,5 +29,5 @@ interface ApiService {
     @POST("/api/bot/files/upload")
     suspend fun fileUpload(
         @Part part: MultipartBody.Part
-    ) : UploadResponse
+    ) : Response<UploadResponse>
 }
