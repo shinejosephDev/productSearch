@@ -21,5 +21,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnMyOrders.setOnClickListener {
             startActivity(Intent(this@MainActivity,MyOrdersActivity::class.java))
         }
+
+        binding.btnPrescription.setOnClickListener {
+            startActivity(Intent(this@MainActivity,PrescriptionActivity::class.java))
+        }
     }
 }

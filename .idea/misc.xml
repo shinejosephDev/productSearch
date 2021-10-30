@@ -5,8 +5,10 @@
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16261398176291794" />
         <entry key="app/src/main/res/layout/activity_my_orders.xml" value="0.16945288753799392" />
-        <entry key="app/src/main/res/layout/activity_prescription.xml" value="0.16261398176291794" />
+        <entry key="app/src/main/res/layout/activity_prescription.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_product_search.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/dialog_images.xml" value="0.16945288753799392" />
+        <entry key="app/src/main/res/layout/list_item_dialog_images.xml" value="0.16945288753799392" />
         <entry key="app/src/main/res/layout/list_item_orders.xml" value="0.16945288753799392" />
         <entry key="app/src/main/res/layout/list_item_search.xml" value="0.16945288753799392" />
       </map>

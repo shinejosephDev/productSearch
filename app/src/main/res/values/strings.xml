@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Life Product Search</string>
+    <string name="notes">Notes</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="flat_number">Flat Number</string>
+    <string name="building">Building</string>
+    <string name="street_address">Street Address</string>
+    <string name="choose_eid">Choose EID</string>
+    <string name="choose_insurance_card">Choose Insurance Card</string>
+    <string name="choose_prescription">Choose Prescription</string>
+    <string name="create_prescription_request">Create Prescription Request</string>
 </resources>
